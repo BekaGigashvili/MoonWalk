@@ -5,6 +5,7 @@ import com.javaprojects.moonwalk.model.User;
 import com.javaprojects.moonwalk.security.auth.RegistrationRequest;
 import com.javaprojects.moonwalk.security.auth.VerificationToken;
 import com.javaprojects.moonwalk.security.exceptions.UserAlreadyRegisteredException;
+import com.javaprojects.moonwalk.service.EmailService;
 import com.javaprojects.moonwalk.service.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +72,7 @@ public class RegistrationService {
                     .expiryDate(LocalDateTime.now().plusDays(1))
                     .build();
             verificationTokenService.save(verificationToken);
-            emailService.sendEmail(user.getEmail(), token);
+            emailService.sendVerificationEmail(user.getEmail(), token);
         }
     }
 

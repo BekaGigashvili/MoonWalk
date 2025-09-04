@@ -1,5 +1,5 @@
 package com.javaprojects.moonwalk.model;
 
 public enum Role {
-    PASSENGER, ADMIN
+    PASSENGER, SYSTEM_ADMIN, HOTEL_ADMIN
 }
