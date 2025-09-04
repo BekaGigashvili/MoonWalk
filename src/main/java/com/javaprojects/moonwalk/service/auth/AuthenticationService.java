@@ -27,6 +27,7 @@ public class AuthenticationService {
             return AuthenticationResponse
                     .builder()
                     .token(token)
+                    .role(user.getRole())
                     .build();
         }else{
             throw new WrongEmailOrPasswordException();

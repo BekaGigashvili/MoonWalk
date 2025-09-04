@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -16,6 +17,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
+
+    private final JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,14 +30,37 @@ public class WebSecurityConfig {
                         authorizeRequests
                                 .requestMatchers("/auth/**")
                                 .permitAll()
+                                .requestMatchers("/webhook").permitAll()
+                                .requestMatchers(
+                                        "/hotels",
+                                        "/capacities/**",
+                                        "/order/checkout",
+                                        "/trip/launch/**",
+                                        "/trip/return/**"
+                                ).hasRole( "PASSENGER")
+                                .requestMatchers(
+                                        "/rocket",
+                                        "/trip/create",
+                                        "/trip/earth-moon",
+                                        "/trip/moon-earth",
+                                        "/trip/create"
+                                ).hasRole("SYSTEM_ADMIN")
+                                .requestMatchers(
+                                        "/room/room",
+                                        "/room/available",
+                                        "/room/occupied",
+                                        "/room/reserved",
+                                        "/room/status",
+                                        "/room"
+                                ).hasRole("HOTEL_ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS
                         )
                 );
+        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
     @Bean

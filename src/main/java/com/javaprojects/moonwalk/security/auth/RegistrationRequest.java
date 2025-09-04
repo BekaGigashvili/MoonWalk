@@ -2,12 +2,16 @@ package com.javaprojects.moonwalk.security.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class RegistrationRequest {
-    private final String firstName;
-    private final String lastName;
-    private final String email;
-    private final String password;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
 }
